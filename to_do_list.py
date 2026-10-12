@@ -50,10 +50,23 @@ def check_status():
             tkinter.messagebox.showinfo(title="Task status", message=f"You have completed {task_completed} tasks. 🫡 ")
         task_completed=0
 
+def delete_it():
+    global index_value, row_value, task_completed
+    try:
+        index_of_task=lb.curselection()[0]
+    except IndexError:
+        tkinter.messagebox.showinfo(title="Option invalid", message=f"🤔 Select the task to delete. ")
+    else:
+        if check_boxes_clicked[index_of_task].get() ==1 and task_completed != 0 :
+                    task_completed -= 1
+        del check_boxes_clicked[index_of_task]
+        check_boxes[index_of_task].destroy()
+        del check_boxes[index_of_task]
+        lb.delete(first=index_of_task, last=None)
+        index_value -=1
 
 screen=Tk()
 screen.title("~~~~ To do list  ~~~~")
-# screen.config(width=400,height=400,pady=10,padx=10)
 
 task=Entry()
 task.focus()
@@ -65,13 +78,14 @@ adding_button=Button(text="Add",command=add_task)
 adding_button.grid(row=1,column=0,padx=10,pady=20)
 task.bind('<Return>', lambda event: add_task())
 
+deleting_button=Button(text="Delete",command=delete_it)
+deleting_button.grid(row=1,column=1,padx=10,pady=20)
+
 clear_button=Button(text="Reset",command=reset_all)
-clear_button.grid(row=1,column=1,padx=10,pady=20)
-task.bind('<Return>', lambda event: add_task())
+clear_button.grid(row=1,column=2,padx=10,pady=20)
 
 check_button=Button(text="Status",command=check_status)
-check_button.grid(row=1,column=2,padx=10,pady=20)
-task.bind('<Return>', lambda event: add_task())
+check_button.grid(row=1,column=3,padx=10,pady=20)
 
 lb =Listbox(screen)
 lb.grid(row=2,column=0)
