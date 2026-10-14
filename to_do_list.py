@@ -7,7 +7,7 @@ check_boxes=[]
 check_boxes_clicked=[]
 task_completed=0
 index_value=1
-row_value=3
+row_value=4
 def add_task():
     global index_value,row_value
     value=task.get()
@@ -28,7 +28,7 @@ def add_task():
 def reset_all():
     global index_value, row_value ,task_completed
     task_completed=0
-    row_value=3
+    row_value=4
     check_boxes_clicked.clear()
     for i in check_boxes:
         i.destroy()
@@ -68,14 +68,21 @@ def delete_it():
 screen=Tk()
 screen.title("~~~~ To do list  ~~~~")
 
+info="""*Type the task and cilck 'Add' or press Enter
+*Select the task in the 'Task list' and cilck 'Delete' to delete the task
+*Cilck the box of the task when it is done
+*Click 'Status' to see your progress
+*Click 'Reset' to restart the application"""
+tkinter.messagebox.showinfo(title="GUIDE",message=f"{info}")
+
 task=Entry()
 task.focus()
-task.grid(row=0, column=1,padx=5,pady=20)
+task.grid(row=0, column=1,padx=5,pady=20,columnspan=3)
 text_one=Label(text=" Enter the task ")
 text_one.grid(row=0,column=0,padx=5,pady=20)
 
 adding_button=Button(text="Add",command=add_task)
-adding_button.grid(row=1,column=0,padx=10,pady=20)
+adding_button.grid(row=1,column=0,pady=20)
 task.bind('<Return>', lambda event: add_task())
 
 deleting_button=Button(text="Delete",command=delete_it)
@@ -87,7 +94,10 @@ clear_button.grid(row=1,column=2,padx=10,pady=20)
 check_button=Button(text="Status",command=check_status)
 check_button.grid(row=1,column=3,padx=10,pady=20)
 
+task_list=Label(text=" Task list ")
+task_list.grid(row=2,column=0)
+
 lb =Listbox(screen)
-lb.grid(row=2,column=0)
+lb.grid(row=3,column=0)
 
 screen.mainloop()
