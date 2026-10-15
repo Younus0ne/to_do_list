@@ -1,15 +1,21 @@
 #!/bin/python3
+#!/bin/python3
 
 from tkinter import *
 import tkinter.messagebox
+from datetime import datetime as dt
 
+#time = dt.now().strftime("%H:%M")
+
+time_slots=[]
 check_boxes=[]
 check_boxes_clicked=[]
 task_completed=0
 index_value=1
+index_value_for_time=1
 row_value=4
 def add_task():
-    global index_value,row_value
+    global index_value,row_value,index_value_for_time
     value=task.get()
     if value == "":
         tkinter.messagebox.showinfo(title="OOPS!!!",message=" 🤔 You have not passed any task")
@@ -23,18 +29,24 @@ def add_task():
 
         lb.insert(index_value, value)
         index_value+=1
+        time=dt.now().strftime("%H:%M")
+        time_op.insert(index_value_for_time,time)
+        time_slots.append(time)
+        index_value_for_time+=1
         task.delete(0,'end')
 
 def reset_all():
-    global index_value, row_value ,task_completed
+    global index_value, row_value ,task_completed,index_value_for_time
     task_completed=0
     row_value=4
     check_boxes_clicked.clear()
+    time_slots.clear()
     for i in check_boxes:
         i.destroy()
     check_boxes.clear()
     lb.delete(first=0,last=index_value)
-    index_value = 1
+    time_op.delete(first=0,last=index_value_for_time)
+    index_value=index_value_for_time = 1
 
 def check_status():
     global task_completed
@@ -51,7 +63,7 @@ def check_status():
         task_completed=0
 
 def delete_it():
-    global index_value, row_value, task_completed
+    global index_value, row_value, task_completed,index_value_for_time
     try:
         index_of_task=lb.curselection()[0]
     except IndexError:
@@ -62,8 +74,11 @@ def delete_it():
         del check_boxes_clicked[index_of_task]
         check_boxes[index_of_task].destroy()
         del check_boxes[index_of_task]
+        del time_slots[index_of_task]
         lb.delete(first=index_of_task, last=None)
+        time_op.delete(first=index_of_task,last=None)
         index_value -=1
+        index_value_for_time-=1
 
 screen=Tk()
 screen.title("~~~~ To do list  ~~~~")
@@ -98,6 +113,12 @@ task_list=Label(text=" Task list ")
 task_list.grid(row=2,column=0)
 
 lb =Listbox(screen)
-lb.grid(row=3,column=0)
+lb.grid(row=3,column=0,padx=20)
+
+time_title=Label(text=" Time the task was set ")
+time_title.grid(row=2,column=1)
+
+time_op=Listbox(screen)
+time_op.grid(row=3,column=1,padx=20)
 
 screen.mainloop()
